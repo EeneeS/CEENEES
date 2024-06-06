@@ -10,6 +10,8 @@ typedef enum {
   TOKEN_KEYWORD,
   TOKEN_NUMBER,
   TOKEN_PLUS,
+  TOKEN_MINUS,
+  TOKEN_SLASH,
   TOKEN_EOF,
 } TokenType;
 
@@ -33,6 +35,7 @@ void lexer_skip_whitespace(Lexer *lexer);
 char *read_word(Lexer *lexer);
 char *read_number(Lexer *lexer);
 Token lexer_next_token(Lexer *lexer);
+void free_token(Token *token);
 
 void lexer_init(Lexer *lexer, char *input) {
   lexer->source_code = input;
@@ -71,6 +74,14 @@ Token lexer_next_token(Lexer *lexer) {
     token.type = TOKEN_PLUS;
     token.value = "+";
     break;
+  case '-':
+    token.type = TOKEN_MINUS;
+    token.value = "-";
+    break;
+  case '/':
+    token.type = TOKEN_SLASH;
+    token.value = "/";
+    break;
   default:
     if (isalpha(lexer->current_char)) {
       token.type = TOKEN_IDENTIFIER;
@@ -85,6 +96,8 @@ Token lexer_next_token(Lexer *lexer) {
   return token;
 }
 
+// TODO: some kind of issue that this lexer advances one to many, maybe I can
+// use lexer->source_code[reading_position] ?
 char *read_word(Lexer *lexer) {
   size_t start_position = lexer->position;
   while (isalpha(lexer->current_char)) {
@@ -107,4 +120,11 @@ char *read_number(Lexer *lexer) {
   strncpy(number, lexer->source_code + start_position, length);
   number[length] = '\0';
   return number;
+}
+
+void free_token(Token *token) {
+  TokenType type = token->type;
+  if (type == TOKEN_IDENTIFIER || type == TOKEN_NUMBER) {
+    free(token->value);
+  }
 }

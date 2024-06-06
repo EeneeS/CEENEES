@@ -22,6 +22,7 @@ int main(int argc, char *argv[]) {
     do {
       token = lexer_next_token(&lexer);
       printf("Token: Type = %d, Value = %s\n", token.type, token.value);
+      free_token(&token);
     } while (token.type != TOKEN_EOF);
 
     free(source_code);

@@ -8,6 +8,8 @@ typedef enum {
   TOKEN_KEYWORD,
   TOKEN_NUMBER,
   TOKEN_PLUS,
+  TOKEN_MINUS,
+  TOKEN_SLASH,
   TOKEN_EOF,
 } TokenType;
 
@@ -27,5 +29,6 @@ typedef struct {
 
 void lexer_init(Lexer *lexer, char *input);
 Token lexer_next_token(Lexer *lexer);
+void free_token(Token *token);
 
 #endif
