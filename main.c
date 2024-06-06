@@ -1,7 +1,7 @@
+#include "include/file_operations.h"
+#include "include/lexer.h"
 #include <stdio.h>
 #include <stdlib.h>
-
-char *read_file(const char *filename);
 
 int main(int argc, char *argv[]) {
   if (argc != 2) {
@@ -12,10 +12,10 @@ int main(int argc, char *argv[]) {
   char *source_code = read_file(argv[1]);
 
   if (source_code != NULL) {
-    printf("%s", source_code);
+    Lexer lexer;
+    lexer_init(&lexer, source_code);
     free(source_code);
   }
 
   return 0;
 }
-
