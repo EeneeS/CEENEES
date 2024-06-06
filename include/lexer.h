@@ -7,9 +7,7 @@ typedef enum {
   TOKEN_IDENTIFIER,
   TOKEN_KEYWORD,
   TOKEN_NUMBER,
-  TOKEN_STRING,
-  TOKEN_BOOLEAN,
-  TOKEN_OPERATOR,
+  TOKEN_PLUS,
   TOKEN_EOF,
 } TokenType;
 
@@ -25,7 +23,6 @@ typedef struct {
   size_t position;
   size_t read_position;
   char current_char;
-  int is_eof;
 } Lexer;
 
 void lexer_init(Lexer *lexer, char *input);
