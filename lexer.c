@@ -1,5 +1,6 @@
 #include <ctype.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <wctype.h>
 
@@ -29,6 +30,12 @@ typedef struct {
   char current_char;
   int is_eof;
 } Lexer;
+
+void lexer_init(Lexer *lexer, char *input);
+void lexer_advance(Lexer *lexer);
+void lexer_skip_whitespace(Lexer *lexer);
+char *read_number(Lexer *lexer);
+Token lexer_next_token(Lexer *lexer);
 
 void lexer_init(Lexer *lexer, char *input) {
   lexer->source_code = input;
@@ -65,11 +72,24 @@ Token lexer_next_token(Lexer *lexer) {
     return token;
   }
 
-  switch (lexer->current_char) {
-  default:
-    printf("check other token");
+  if (isdigit(lexer->current_char)) {
+    token.type = TOKEN_NUMBER;
+    token.value = read_number(lexer);
+    return token;
   }
 
   lexer_advance(lexer);
   return token;
+}
+
+char *read_number(Lexer *lexer) {
+  size_t start_position = lexer->position;
+  while (isdigit(lexer->current_char)) {
+    lexer_advance(lexer);
+  }
+  size_t length = lexer->position - start_position;
+  char *number = (char *)malloc(length + 1);
+  strncpy(number, lexer->source_code + start_position, length);
+  number[length] = '\0';
+  return number;
 }
