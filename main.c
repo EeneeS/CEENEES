@@ -1,20 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-typedef enum {
-  TOKEN_IDENTIFIER,
-  TOKEN_NUMBER,
-  TOKEN_STRING,
-  TOKEN_OPERATOR,
-  TOKEN_KEYWORD,
-  TOKEN_EOF,
-} TokenType;
-
-typedef struct {
-  TokenType type;
-  char *value;
-} Token;
-
 char *read_file();
 
 int main() {
