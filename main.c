@@ -53,6 +53,9 @@ int main(int argc, char *argv[]) {
 }
 
 void token_array_free(TokenArray *tokenArray) {
+  for (size_t i = 0; i < tokenArray->amount; i++) {
+    free_token(&tokenArray->tokens[i]);
+  }
   free(tokenArray->tokens);
   tokenArray->tokens = NULL;
   tokenArray->amount = tokenArray->capacity = 0;
