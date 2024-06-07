@@ -3,9 +3,12 @@
 
 #include <stddef.h>
 
+// KEEP ORDER, ADD TO END OF LIST !!!
 typedef enum {
   TOKEN_IDENTIFIER,
   TOKEN_KEYWORD,
+  TOKEN_INVALID,
+  TOKEN_EOF,
   TOKEN_NUMBER,
   TOKEN_PLUS,
   TOKEN_MULTIPLY,
@@ -18,8 +21,11 @@ typedef enum {
   TOKEN_ASSIGNMENT,
   TOKEN_LTE,
   TOKEN_GTE,
-  TOKEN_INVALID,
-  TOKEN_EOF,
+  TOKEN_LPAREN,
+  TOKEN_RPAREN,
+  TOKEN_LBRACE,
+  TOKEN_RBRACE,
+  TOKEN_SEMICOLON,
 } TokenType;
 
 typedef struct {

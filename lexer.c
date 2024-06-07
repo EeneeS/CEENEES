@@ -5,9 +5,12 @@
 
 const char *KEYWORDS[] = {};
 
+// KEEP ORDER, ADD TO END OF LIST !!!
 typedef enum {
   TOKEN_IDENTIFIER,
   TOKEN_KEYWORD,
+  TOKEN_INVALID,
+  TOKEN_EOF,
   TOKEN_NUMBER,
   TOKEN_PLUS,
   TOKEN_MULTIPLY,
@@ -20,8 +23,11 @@ typedef enum {
   TOKEN_ASSIGNMENT,
   TOKEN_LTE,
   TOKEN_GTE,
-  TOKEN_INVALID,
-  TOKEN_EOF,
+  TOKEN_LPAREN,
+  TOKEN_RPAREN,
+  TOKEN_LBRACE,
+  TOKEN_RBRACE,
+  TOKEN_SEMICOLON,
 } TokenType;
 
 typedef struct {
@@ -127,6 +133,7 @@ Token lexer_next_token(Lexer *lexer) {
       lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char);
+      lexer_advance(lexer);
     }
     break;
   case '<':
@@ -136,7 +143,28 @@ Token lexer_next_token(Lexer *lexer) {
       lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char);
+      lexer_advance(lexer);
     }
+    break;
+  case '(':
+    lexer_set_token(&token, TOKEN_LPAREN, "(");
+    lexer_advance(lexer);
+    break;
+  case ')':
+    lexer_set_token(&token, TOKEN_RPAREN, ")");
+    lexer_advance(lexer);
+    break;
+  case '{':
+    lexer_set_token(&token, TOKEN_LBRACE, "{");
+    lexer_advance(lexer);
+    break;
+  case '}':
+    lexer_set_token(&token, TOKEN_RBRACE, "}");
+    lexer_advance(lexer);
+    break;
+  case ';':
+    lexer_set_token(&token, TOKEN_SEMICOLON, ";");
+    lexer_advance(lexer);
     break;
   default:
     if (isalpha(lexer->current_char)) {
