@@ -205,7 +205,7 @@ char *read_string(Lexer *lexer) {
 
 char *read_word(Lexer *lexer) {
   size_t start_position = lexer->position;
-  while (isalpha(lexer->current_char)) {
+  while (isalpha(lexer->current_char) || lexer->current_char == '_') {
     lexer_advance(lexer);
   }
   size_t length = lexer->position - start_position;
