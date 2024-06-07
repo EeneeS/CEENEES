@@ -3,32 +3,34 @@
 #include <stdlib.h>
 #include <string.h>
 
-const char *KEYWORDS[] = {};
+const char *KEYWORDS[] = {
+    "function", "print", "if", "else", "elseif",
+};
 
 // KEEP ORDER, ADD TO END OF LIST !!!
 typedef enum {
-  TOKEN_IDENTIFIER,
-  TOKEN_KEYWORD,
-  TOKEN_INVALID,
-  TOKEN_EOF,
-  TOKEN_NUMBER,
-  TOKEN_STRING,
-  TOKEN_PLUS,
-  TOKEN_MULTIPLY,
-  TOKEN_INCREMENT,
-  TOKEN_DECREMENT,
-  TOKEN_EXPONENTIATION,
-  TOKEN_MINUS,
-  TOKEN_SLASH,
-  TOKEN_EQUALITY,
-  TOKEN_ASSIGNMENT,
-  TOKEN_LTE,
-  TOKEN_GTE,
-  TOKEN_LPAREN,
-  TOKEN_RPAREN,
-  TOKEN_LBRACE,
-  TOKEN_RBRACE,
-  TOKEN_SEMICOLON,
+  TOKEN_IDENTIFIER,     // 0
+  TOKEN_KEYWORD,        // 1
+  TOKEN_INVALID,        // 2
+  TOKEN_EOF,            // 3
+  TOKEN_NUMBER,         // 4
+  TOKEN_STRING,         // 5
+  TOKEN_PLUS,           // 6
+  TOKEN_MULTIPLY,       // 7
+  TOKEN_INCREMENT,      // 8
+  TOKEN_DECREMENT,      // 9
+  TOKEN_EXPONENTIATION, // 10
+  TOKEN_MINUS,          // 11
+  TOKEN_SLASH,          // 12
+  TOKEN_EQUALITY,       // 13
+  TOKEN_ASSIGNMENT,     // 14
+  TOKEN_LTE,            // 15
+  TOKEN_GTE,            // 16
+  TOKEN_LPAREN,         // 17
+  TOKEN_RPAREN,         // 18
+  TOKEN_LBRACE,         // 19
+  TOKEN_RBRACE,         // 20
+  TOKEN_SEMICOLON,      // 21
 } TokenType;
 
 typedef struct {
@@ -173,7 +175,15 @@ Token lexer_next_token(Lexer *lexer) {
     break;
   default:
     if (isalpha(lexer->current_char)) {
-      lexer_set_token(&token, TOKEN_IDENTIFIER, read_word(lexer));
+      char *word = read_word(lexer);
+      TokenType type = TOKEN_IDENTIFIER;
+      for (size_t i = 0; i < sizeof(KEYWORDS) / sizeof(KEYWORDS[0]); i++) {
+        if (strcmp(word, KEYWORDS[i]) == 0) {
+          type = TOKEN_KEYWORD;
+          break;
+        }
+      }
+      lexer_set_token(&token, type, word);
     } else if (isdigit(lexer->current_char)) {
       lexer_set_token(&token, TOKEN_NUMBER, read_number(lexer));
     } else {
@@ -229,7 +239,8 @@ char *read_number(Lexer *lexer) {
 
 void free_token(Token *token) {
   TokenType type = token->type;
-  if (type == TOKEN_IDENTIFIER || type == TOKEN_NUMBER) {
+  if (type == TOKEN_IDENTIFIER || type == TOKEN_NUMBER ||
+      type == TOKEN_STRING) {
     free(token->value);
   }
 }

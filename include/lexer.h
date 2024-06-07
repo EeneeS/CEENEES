@@ -5,28 +5,28 @@
 
 // KEEP ORDER, ADD TO END OF LIST !!!
 typedef enum {
-  TOKEN_IDENTIFIER,
-  TOKEN_KEYWORD,
-  TOKEN_INVALID,
-  TOKEN_EOF,
-  TOKEN_NUMBER,
-  TOKEN_STRING,
-  TOKEN_PLUS,
-  TOKEN_MULTIPLY,
-  TOKEN_INCREMENT,
-  TOKEN_DECREMENT,
-  TOKEN_EXPONENTIATION,
-  TOKEN_MINUS,
-  TOKEN_SLASH,
-  TOKEN_EQUALITY,
-  TOKEN_ASSIGNMENT,
-  TOKEN_LTE,
-  TOKEN_GTE,
-  TOKEN_LPAREN,
-  TOKEN_RPAREN,
-  TOKEN_LBRACE,
-  TOKEN_RBRACE,
-  TOKEN_SEMICOLON,
+  TOKEN_IDENTIFIER,     // 0
+  TOKEN_KEYWORD,        // 1
+  TOKEN_INVALID,        // 2
+  TOKEN_EOF,            // 3
+  TOKEN_NUMBER,         // 4
+  TOKEN_STRING,         // 5
+  TOKEN_PLUS,           // 6
+  TOKEN_MULTIPLY,       // 7
+  TOKEN_INCREMENT,      // 8
+  TOKEN_DECREMENT,      // 9
+  TOKEN_EXPONENTIATION, // 10
+  TOKEN_MINUS,          // 11
+  TOKEN_SLASH,          // 12
+  TOKEN_EQUALITY,       // 13
+  TOKEN_ASSIGNMENT,     // 14
+  TOKEN_LTE,            // 15
+  TOKEN_GTE,            // 16
+  TOKEN_LPAREN,         // 17
+  TOKEN_RPAREN,         // 18
+  TOKEN_LBRACE,         // 19
+  TOKEN_RBRACE,         // 20
+  TOKEN_SEMICOLON,      // 21
 } TokenType;
 
 typedef struct {
