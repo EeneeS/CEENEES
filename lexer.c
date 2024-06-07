@@ -160,27 +160,6 @@ void lexer_set_token(Token *token, TokenType type, char *value) {
   token->value = value;
 }
 
-// char *read_operator(Lexer *lexer) {
-//
-//   size_t start_position = lexer->position;
-//   size_t length = 1;
-//
-//   for (int i = 0; i < strlen(operators); i++) {
-//     if (lexer->current_char == operators[i]) {
-//       length++;
-//       lexer_advance(lexer);
-//       break;
-//     }
-//   }
-//
-//   // TODO: check if a valid operator
-//
-//   char *operator=(char *) malloc(length + 1);
-//   strncpy(operator, lexer->source_code + start_position, length);
-//   operator[length] = '\0';
-//   return operator;
-// }
-
 char *read_word(Lexer *lexer) {
   size_t start_position = lexer->position;
   while (isalpha(lexer->current_char)) {
