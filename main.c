@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+// TODO: dont forget to free the value in the TOKEN!!!!!!!!
+
 typedef struct {
   Token *tokens;
   size_t amount;
@@ -36,7 +38,6 @@ int main(int argc, char *argv[]) {
     do {
       token = lexer_next_token(&lexer);
       token_array_add(&tokenArray, &token);
-      free_token(&token);
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
 
     printf("Token Array:\n");
@@ -76,8 +77,7 @@ void token_array_add(TokenArray *tokenArray, Token *token) {
     tokenArray->tokens = ptr;
     tokenArray->capacity++;
   }
-  tokenArray->tokens[tokenArray->amount].type = token->type;
-  tokenArray->tokens[tokenArray->amount].value = strdup(token->value);
+  tokenArray->tokens[tokenArray->amount] = *token;
   tokenArray->amount++;
 }
 
