@@ -12,6 +12,7 @@ typedef enum {
   TOKEN_INVALID,
   TOKEN_EOF,
   TOKEN_NUMBER,
+  TOKEN_STRING,
   TOKEN_PLUS,
   TOKEN_MULTIPLY,
   TOKEN_INCREMENT,
@@ -50,6 +51,7 @@ void lexer_skip_whitespace(Lexer *lexer);
 char *read_operator(Lexer *lexer);
 char *read_word(Lexer *lexer);
 char *read_number(Lexer *lexer);
+char *read_string(Lexer *lexer);
 Token lexer_next_token(Lexer *lexer);
 void lexer_set_token(Token *token, TokenType type, char *value);
 void free_token(Token *token);
@@ -166,6 +168,9 @@ Token lexer_next_token(Lexer *lexer) {
     lexer_set_token(&token, TOKEN_SEMICOLON, ";");
     lexer_advance(lexer);
     break;
+  case '"':
+    lexer_set_token(&token, TOKEN_STRING, read_string(lexer));
+    break;
   default:
     if (isalpha(lexer->current_char)) {
       lexer_set_token(&token, TOKEN_IDENTIFIER, read_word(lexer));
@@ -182,6 +187,20 @@ Token lexer_next_token(Lexer *lexer) {
 void lexer_set_token(Token *token, TokenType type, char *value) {
   token->type = type;
   token->value = value;
+}
+
+char *read_string(Lexer *lexer) {
+  size_t start_position = lexer->position;
+  lexer_advance(lexer);
+  while (lexer->current_char != '"') {
+    lexer_advance(lexer);
+  }
+  lexer_advance(lexer);
+  size_t length = lexer->position - start_position;
+  char *string = (char *)malloc(length + 1);
+  strncpy(string, lexer->source_code + start_position, length);
+  string[length] = '\0';
+  return string;
 }
 
 char *read_word(Lexer *lexer) {
