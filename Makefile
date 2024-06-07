@@ -18,9 +18,13 @@ $(TARGET): $(OBJ)
 	$(CC) -o $(TARGET) $(OBJ)
 
 # Rule to compile the source files into object files
-build/%.o: %.c
+build/%.o: %.c | build
 	@mkdir -p $(@D)
 	$(CC) -c $< -o $@
+
+# Rule to create the build directory
+build:
+	mkdir -p $@
 
 # Rule to clean the build
 clean:
@@ -28,7 +32,7 @@ clean:
 
 # Rule to run the program
 run: $(TARGET)
-	./$(TARGET) source_code.txt
+	./$(TARGET) ./data/source_code.txt
 
 .PHONY: clean run
 
