@@ -18,6 +18,8 @@ typedef enum {
   TOKEN_SLASH,
   TOKEN_EQUALITY,
   TOKEN_ASSIGNMENT,
+  TOKEN_LTE,
+  TOKEN_GTE,
   TOKEN_INVALID,
   TOKEN_EOF,
 } TokenType;
@@ -120,6 +122,24 @@ Token lexer_next_token(Lexer *lexer) {
     } else {
       lexer_set_token(&token, TOKEN_ASSIGNMENT, "=");
       lexer_advance(lexer);
+    }
+    break;
+  case '>':
+    if (lexer->source_code[lexer->read_position] == '=') {
+      lexer_set_token(&token, TOKEN_GTE, ">=");
+      lexer_advance(lexer);
+      lexer_advance(lexer);
+    } else {
+      lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char);
+    }
+    break;
+  case '<':
+    if (lexer->source_code[lexer->read_position] == '=') {
+      lexer_set_token(&token, TOKEN_LTE, "<=");
+      lexer_advance(lexer);
+      lexer_advance(lexer);
+    } else {
+      lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char);
     }
     break;
   default:
