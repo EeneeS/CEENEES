@@ -2,6 +2,7 @@
 #include "include/lexer.h"
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef struct {
   Token *tokens;
@@ -34,10 +35,15 @@ int main(int argc, char *argv[]) {
 
     do {
       token = lexer_next_token(&lexer);
-      // printf("Token: Type = %d, Value = %s\n", token.type, token.value);
       token_array_add(&tokenArray, &token);
       free_token(&token);
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
+
+    printf("Token Array:\n");
+    for (size_t i = 0; i < tokenArray.amount; ++i) {
+      printf("Token %zu: Type = %d, Value = %s\n", i, tokenArray.tokens[i].type,
+             tokenArray.tokens[i].value);
+    }
 
     token_array_free(&tokenArray);
     free(source_code);
@@ -70,7 +76,8 @@ void token_array_add(TokenArray *tokenArray, Token *token) {
     tokenArray->tokens = ptr;
     tokenArray->capacity++;
   }
-  tokenArray->tokens[tokenArray->amount] = *token;
+  tokenArray->tokens[tokenArray->amount].type = token->type;
+  tokenArray->tokens[tokenArray->amount].value = strdup(token->value);
   tokenArray->amount++;
 }
 
