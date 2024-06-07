@@ -2,13 +2,13 @@
 CC = gcc
 
 # Define the target executable
-TARGET = program
+TARGET = build/program
 
 # Define the source files
 SRC = main.c file_operations.c lexer.c
 
 # Define the object files
-OBJ = $(SRC:.c=.o)
+OBJ = $(addprefix build/,$(SRC:.c=.o))
 
 # Define the default rule to build the executable
 all: $(TARGET)
@@ -18,12 +18,13 @@ $(TARGET): $(OBJ)
 	$(CC) -o $(TARGET) $(OBJ)
 
 # Rule to compile the source files into object files
-%.o: %.c
+build/%.o: %.c
+	@mkdir -p $(@D)
 	$(CC) -c $< -o $@
 
 # Rule to clean the build
 clean:
-	rm -f $(TARGET) $(OBJ)
+	rm -rf build
 
 # Rule to run the program
 run: $(TARGET)
