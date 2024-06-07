@@ -16,6 +16,7 @@ typedef enum {
   TOKEN_SLASH,
   TOKEN_EQUALITY,
   TOKEN_ASSIGNMENT,
+  TOKEN_INVALID,
   TOKEN_EOF,
 } TokenType;
 

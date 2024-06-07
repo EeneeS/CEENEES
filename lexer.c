@@ -18,6 +18,7 @@ typedef enum {
   TOKEN_SLASH,
   TOKEN_EQUALITY,
   TOKEN_ASSIGNMENT,
+  TOKEN_INVALID,
   TOKEN_EOF,
 } TokenType;
 
@@ -126,6 +127,8 @@ Token lexer_next_token(Lexer *lexer) {
       lexer_set_token(&token, TOKEN_IDENTIFIER, read_word(lexer));
     } else if (isdigit(lexer->current_char)) {
       lexer_set_token(&token, TOKEN_NUMBER, read_number(lexer));
+    } else {
+      lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char);
     }
     break;
   }
