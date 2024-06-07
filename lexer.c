@@ -85,31 +85,28 @@ Token lexer_next_token(Lexer *lexer) {
     if (lexer->source_code[lexer->read_position] == '+') {
       lexer_set_token(&token, TOKEN_INCREMENT, "++");
       lexer_advance(lexer);
-      lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_PLUS, "+");
-      lexer_advance(lexer);
     }
+    lexer_advance(lexer);
     break;
   case '-':
     if (lexer->source_code[lexer->read_position] == '-') {
       lexer_set_token(&token, TOKEN_DECREMENT, "--");
       lexer_advance(lexer);
-      lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_MINUS, "-");
-      lexer_advance(lexer);
     }
+    lexer_advance(lexer);
     break;
   case '*':
     if (lexer->source_code[lexer->read_position] == '*') {
       lexer_set_token(&token, TOKEN_EXPONENTIATION, "**");
       lexer_advance(lexer);
-      lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_MULTIPLY, "*");
-      lexer_advance(lexer);
     }
+    lexer_advance(lexer);
     break;
   case '/':
     lexer_set_token(&token, TOKEN_SLASH, "/");
@@ -118,11 +115,10 @@ Token lexer_next_token(Lexer *lexer) {
     if (lexer->source_code[lexer->read_position] == '=') {
       lexer_set_token(&token, TOKEN_EQUALITY, "==");
       lexer_advance(lexer);
-      lexer_advance(lexer);
     } else {
       lexer_set_token(&token, TOKEN_ASSIGNMENT, "=");
-      lexer_advance(lexer);
     }
+    lexer_advance(lexer);
     break;
   case '>':
     if (lexer->source_code[lexer->read_position] == '=') {
