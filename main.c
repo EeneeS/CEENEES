@@ -4,8 +4,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-// TODO: dont forget to free the value in the TOKEN!!!!!!!!
-
 typedef struct {
   Token *tokens;
   size_t amount;
