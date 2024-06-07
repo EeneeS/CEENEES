@@ -35,6 +35,7 @@ void lexer_skip_whitespace(Lexer *lexer);
 char *read_word(Lexer *lexer);
 char *read_number(Lexer *lexer);
 Token lexer_next_token(Lexer *lexer);
+void lexer_set_token(Token *token, TokenType type, char *value);
 void free_token(Token *token);
 
 void lexer_init(Lexer *lexer, char *input) {
@@ -73,31 +74,34 @@ Token lexer_next_token(Lexer *lexer) {
   case '+':
     token.type = TOKEN_PLUS;
     token.value = "+";
+    lexer_advance(lexer);
     break;
   case '-':
     token.type = TOKEN_MINUS;
     token.value = "-";
+    lexer_advance(lexer);
     break;
   case '/':
     token.type = TOKEN_SLASH;
     token.value = "/";
+    lexer_advance(lexer);
     break;
   default:
     if (isalpha(lexer->current_char)) {
-      token.type = TOKEN_IDENTIFIER;
-      token.value = read_word(lexer);
+      lexer_set_token(&token, TOKEN_IDENTIFIER, read_word(lexer));
     } else if (isdigit(lexer->current_char)) {
-      token.type = TOKEN_NUMBER;
-      token.value = read_number(lexer);
+      lexer_set_token(&token, TOKEN_NUMBER, read_number(lexer));
     }
     break;
   }
-  lexer_advance(lexer);
   return token;
 }
 
-// TODO: some kind of issue that this lexer advances one to many, maybe I can
-// use lexer->source_code[reading_position] ?
+void lexer_set_token(Token *token, TokenType type, char *value) {
+  token->type = type;
+  token->value = value;
+}
+
 char *read_word(Lexer *lexer) {
   size_t start_position = lexer->position;
   while (isalpha(lexer->current_char)) {
