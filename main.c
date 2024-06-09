@@ -38,7 +38,6 @@ int main(int argc, char *argv[]) {
       token_array_add(&tokenArray, &token);
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
 
-    printf("Token Array:\n");
     for (size_t i = 0; i < tokenArray.amount; ++i) {
       printf("Token %zu: Type = %d, Value = %s\n", i, tokenArray.tokens[i].type,
              tokenArray.tokens[i].value);
@@ -81,4 +80,3 @@ void token_array_add(TokenArray *tokenArray, Token *token) {
   tokenArray->tokens[tokenArray->amount] = *token;
   tokenArray->amount++;
 }
-
