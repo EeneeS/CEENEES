@@ -47,6 +47,12 @@ typedef struct {
   char current_char;
 } Lexer;
 
+typedef struct {
+  Token *tokens;
+  size_t amount;
+  size_t capacity;
+} TokenArray;
+
 void lexer_init(Lexer *lexer, char *input);
 void lexer_advance(Lexer *lexer);
 void lexer_skip_whitespace(Lexer *lexer);
@@ -57,6 +63,10 @@ char *read_string(Lexer *lexer);
 Token lexer_next_token(Lexer *lexer);
 void lexer_set_token(Token *token, TokenType type, char *value);
 void free_token(Token *token);
+
+void token_array_init(TokenArray *tokenArray);
+void token_array_free(TokenArray *tokenArray);
+void token_array_add(TokenArray *tokenArray, Token *token);
 
 void lexer_init(Lexer *lexer, char *input) {
   lexer->source_code = input;
@@ -243,4 +253,36 @@ void free_token(Token *token) {
       type == TOKEN_STRING) {
     free(token->value);
   }
+}
+
+void token_array_free(TokenArray *tokenArray) {
+  for (size_t i = 0; i < tokenArray->amount; i++) {
+    free_token(&tokenArray->tokens[i]);
+  }
+  free(tokenArray->tokens);
+  tokenArray->tokens = NULL;
+  tokenArray->amount = tokenArray->capacity = 0;
+}
+
+void token_array_init(TokenArray *tokenArray) {
+  tokenArray->tokens = malloc(1 * sizeof(Token));
+  if (tokenArray->tokens == NULL) {
+    return;
+  }
+  tokenArray->amount = 0;
+  tokenArray->capacity = 1;
+}
+
+void token_array_add(TokenArray *tokenArray, Token *token) {
+  if (tokenArray->amount >= tokenArray->capacity) {
+    Token *ptr =
+        realloc(tokenArray->tokens, (tokenArray->capacity + 1) * sizeof(Token));
+    if (ptr == NULL) {
+      return;
+    }
+    tokenArray->tokens = ptr;
+    tokenArray->capacity++;
+  }
+  tokenArray->tokens[tokenArray->amount] = *token;
+  tokenArray->amount++;
 }
