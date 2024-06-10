@@ -113,8 +113,8 @@ Token lexer_next_token(Lexer *lexer) {
 
   lexer_skip_whitespace(lexer);
 
-  uint line = lexer->line;
-  uint column = lexer->column;
+  int line = lexer->line;
+  int column = lexer->column;
 
   switch (lexer->current_char) {
   case '\0':
