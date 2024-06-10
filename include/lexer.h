@@ -43,8 +43,18 @@ typedef struct {
   char current_char;
 } Lexer;
 
+typedef struct {
+  Token *tokens;
+  size_t amount;
+  size_t capacity;
+} TokenArray;
+
 void lexer_init(Lexer *lexer, char *input);
 Token lexer_next_token(Lexer *lexer);
 void free_token(Token *token);
+
+void token_array_init(TokenArray *tokenArray);
+void token_array_free(TokenArray *tokenArray);
+void token_array_add(TokenArray *tokenArray, Token *token);
 
 #endif
