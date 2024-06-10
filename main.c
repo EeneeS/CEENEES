@@ -29,6 +29,13 @@ int main(int argc, char *argv[]) {
       token_array_add(&tokenArray, &token);
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
 
+    if (token.type == TOKEN_INVALID) {
+      fprintf(stderr, "Error: Invalid character detected\n");
+      token_array_free(&tokenArray);
+      free(source_code);
+      return 0;
+    }
+
     Parser parser;
     parser_init(&parser, &tokenArray);
 
