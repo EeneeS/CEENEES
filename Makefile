@@ -32,7 +32,7 @@ clean:
 
 # Rule to run the program
 run: $(TARGET)
-	./$(TARGET) ./data/source_code.txt
+	./$(TARGET) ./data/source_code.ce
 
 .PHONY: clean run
 
