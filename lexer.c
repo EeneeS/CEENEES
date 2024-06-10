@@ -58,6 +58,7 @@ typedef struct {
 
 void lexer_init(Lexer *lexer, char *input);
 void lexer_advance(Lexer *lexer);
+void lexer_update_line_column(Lexer *lexer);
 void lexer_skip_whitespace(Lexer *lexer);
 char *read_operator(Lexer *lexer);
 char *read_word(Lexer *lexer);
@@ -82,7 +83,17 @@ void lexer_init(Lexer *lexer, char *input) {
 }
 
 void lexer_advance(Lexer *lexer) {
+  lexer_update_line_column(lexer);
+  if (lexer->read_position >= strlen(lexer->source_code)) {
+    lexer->current_char = '\0';
+  } else {
+    lexer->current_char = lexer->source_code[lexer->read_position];
+  }
+  lexer->position = lexer->read_position;
+  lexer->read_position++;
+}
 
+void lexer_update_line_column(Lexer *lexer) {
   if (lexer->current_char == '\n') {
     lexer->line++;
     lexer->column = 1;
@@ -91,14 +102,6 @@ void lexer_advance(Lexer *lexer) {
   } else {
     lexer->column++;
   }
-
-  if (lexer->read_position >= strlen(lexer->source_code)) {
-    lexer->current_char = '\0';
-  } else {
-    lexer->current_char = lexer->source_code[lexer->read_position];
-  }
-  lexer->position = lexer->read_position;
-  lexer->read_position++;
 }
 
 void lexer_skip_whitespace(Lexer *lexer) {
