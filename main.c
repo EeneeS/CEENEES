@@ -1,5 +1,6 @@
 #include "include/file_operations.h"
 #include "include/lexer.h"
+#include "include/parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
@@ -27,6 +28,9 @@ int main(int argc, char *argv[]) {
       token = lexer_next_token(&lexer);
       token_array_add(&tokenArray, &token);
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
+
+    Parser parser;
+    parser_init(&parser, &tokenArray);
 
     for (size_t i = 0; i < tokenArray.amount; ++i) {
       printf("Token %zu: Type = %d, Value = %s\n", i, tokenArray.tokens[i].type,
