@@ -41,6 +41,8 @@ typedef struct {
   size_t position;
   size_t read_position;
   char current_char;
+  int line;
+  int column;
 } Lexer;
 
 typedef struct {

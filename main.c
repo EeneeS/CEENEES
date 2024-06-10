@@ -40,8 +40,9 @@ int main(int argc, char *argv[]) {
     parser_init(&parser, &tokenArray);
 
     for (size_t i = 0; i < tokenArray.amount; ++i) {
-      printf("Token %zu: Type = %d, Value = %s\n", i, tokenArray.tokens[i].type,
-             tokenArray.tokens[i].value);
+      printf("Token %zu: Type= %d, Value= %s, Line= %d, Column= %d \n", i,
+             tokenArray.tokens[i].type, tokenArray.tokens[i].value,
+             tokenArray.tokens[i].line, tokenArray.tokens[i].column);
     }
 
     token_array_free(&tokenArray);
