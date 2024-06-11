@@ -30,7 +30,8 @@ int main(int argc, char *argv[]) {
     } while (token.type != TOKEN_EOF && token.type != TOKEN_INVALID);
 
     if (token.type == TOKEN_INVALID) {
-      fprintf(stderr, "Error: Invalid character detected\n");
+      fprintf(stderr, "Error: Invalid character detected %d:%d\n", token.line,
+              token.column);
       token_array_free(&tokenArray);
       free(source_code);
       return 0;
@@ -40,9 +41,9 @@ int main(int argc, char *argv[]) {
     parser_init(&parser, &tokenArray);
 
     for (size_t i = 0; i < tokenArray.amount; ++i) {
-      printf("Token %zu: Type= %d, Value= %s, Line= %d, Column= %d \n", i,
-             tokenArray.tokens[i].type, tokenArray.tokens[i].value,
-             tokenArray.tokens[i].line, tokenArray.tokens[i].column);
+      printf("Token %zu: Line = %d, Column = %d, Type = %d, Value = %s\n", i,
+             tokenArray.tokens[i].line, tokenArray.tokens[i].column,
+             tokenArray.tokens[i].type, tokenArray.tokens[i].value);
     }
 
     token_array_free(&tokenArray);

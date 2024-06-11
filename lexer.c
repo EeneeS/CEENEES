@@ -5,8 +5,9 @@
 #include <sys/types.h>
 
 const char *KEYWORDS[] = {
-    "function", "print", "if", "else", "elseif",
-};
+    "and",    "end",  "in",     "repeat", "break", "false", "local",
+    "return", "do",   "for",    "nil",    "then",  "else",  "function",
+    "not",    "true", "elseif", "if",     "or",    "until", "while"};
 
 // KEEP ORDER, ADD TO END OF LIST !!!
 typedef enum {
@@ -18,20 +19,27 @@ typedef enum {
   TOKEN_STRING,         // 5
   TOKEN_PLUS,           // 6
   TOKEN_MULTIPLY,       // 7
-  TOKEN_INCREMENT,      // 8
-  TOKEN_DECREMENT,      // 9
+  TOKEN_INCREMENT,      // 8 TODO: REMOVE
+  TOKEN_DECREMENT,      // 9 TODO: REMOVE
   TOKEN_EXPONENTIATION, // 10
   TOKEN_MINUS,          // 11
   TOKEN_SLASH,          // 12
   TOKEN_EQUALITY,       // 13
   TOKEN_ASSIGNMENT,     // 14
-  TOKEN_LTE,            // 15
-  TOKEN_GTE,            // 16
-  TOKEN_LPAREN,         // 17
-  TOKEN_RPAREN,         // 18
-  TOKEN_LBRACE,         // 19
-  TOKEN_RBRACE,         // 20
-  TOKEN_SEMICOLON,      // 21
+  TOKEN_LT,             // 15
+  TOKEN_GT,             // 16
+  TOKEN_LTE,            // 17
+  TOKEN_GTE,            // 18
+  TOKEN_LPAREN,         // 19
+  TOKEN_RPAREN,         // 20
+  TOKEN_LBRACE,         // 21
+  TOKEN_RBRACE,         // 22
+  TOKEN_SEMICOLON,      // 23
+  TOKEN_COMMA,          // 24
+  TOKEN_DOT,            // 25
+  TOKEN_LBRACKET,       // 26
+  TOKEN_RBRACKET,       // 27
+  TOKEN_COMMENT,        // 28
 } TokenType;
 
 typedef struct {
@@ -64,6 +72,7 @@ char *read_operator(Lexer *lexer);
 char *read_word(Lexer *lexer);
 char *read_number(Lexer *lexer);
 char *read_string(Lexer *lexer);
+char *read_comment(Lexer *lexer);
 Token lexer_next_token(Lexer *lexer);
 void lexer_set_token(Token *token, TokenType type, char *value, int line,
                      int number);
@@ -124,34 +133,27 @@ Token lexer_next_token(Lexer *lexer) {
     lexer_set_token(&token, TOKEN_EOF, "EOF", line, column);
     break;
   case '+':
-    if (lexer->source_code[lexer->read_position] == '+') {
-      lexer_set_token(&token, TOKEN_INCREMENT, "++", line, column);
-      lexer_advance(lexer);
-    } else {
-      lexer_set_token(&token, TOKEN_PLUS, "+", line, column);
-    }
+    lexer_set_token(&token, TOKEN_PLUS, "+", line, column);
     lexer_advance(lexer);
     break;
   case '-':
     if (lexer->source_code[lexer->read_position] == '-') {
-      lexer_set_token(&token, TOKEN_DECREMENT, "--", line, column);
-      lexer_advance(lexer);
+      lexer_set_token(&token, TOKEN_COMMENT, read_comment(lexer), line, column);
     } else {
       lexer_set_token(&token, TOKEN_MINUS, "-", line, column);
+      lexer_advance(lexer);
     }
-    lexer_advance(lexer);
     break;
   case '*':
-    if (lexer->source_code[lexer->read_position] == '*') {
-      lexer_set_token(&token, TOKEN_EXPONENTIATION, "**", line, column);
-      lexer_advance(lexer);
-    } else {
-      lexer_set_token(&token, TOKEN_MULTIPLY, "*", line, column);
-    }
+    lexer_set_token(&token, TOKEN_MULTIPLY, "*", line, column);
     lexer_advance(lexer);
     break;
   case '/':
     lexer_set_token(&token, TOKEN_SLASH, "/", line, column);
+    lexer_advance(lexer);
+    break;
+  case '^':
+    lexer_set_token(&token, TOKEN_EXPONENTIATION, "^", line, column);
     lexer_advance(lexer);
   case '=':
     if (lexer->source_code[lexer->read_position] == '=') {
@@ -168,8 +170,7 @@ Token lexer_next_token(Lexer *lexer) {
       lexer_advance(lexer);
       lexer_advance(lexer);
     } else {
-      lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char, line,
-                      column);
+      lexer_set_token(&token, TOKEN_GT, ">", line, column);
       lexer_advance(lexer);
     }
     break;
@@ -179,8 +180,7 @@ Token lexer_next_token(Lexer *lexer) {
       lexer_advance(lexer);
       lexer_advance(lexer);
     } else {
-      lexer_set_token(&token, TOKEN_INVALID, &lexer->current_char, line,
-                      column);
+      lexer_set_token(&token, TOKEN_LT, "<", line, column);
       lexer_advance(lexer);
     }
     break;
@@ -190,6 +190,14 @@ Token lexer_next_token(Lexer *lexer) {
     break;
   case ')':
     lexer_set_token(&token, TOKEN_RPAREN, ")", line, column);
+    lexer_advance(lexer);
+    break;
+  case '[':
+    lexer_set_token(&token, TOKEN_LBRACKET, "[", line, column);
+    lexer_advance(lexer);
+    break;
+  case ']':
+    lexer_set_token(&token, TOKEN_RBRACKET, "]", line, column);
     lexer_advance(lexer);
     break;
   case '{':
@@ -202,6 +210,14 @@ Token lexer_next_token(Lexer *lexer) {
     break;
   case ';':
     lexer_set_token(&token, TOKEN_SEMICOLON, ";", line, column);
+    lexer_advance(lexer);
+    break;
+  case '.':
+    lexer_set_token(&token, TOKEN_DOT, ".", line, column);
+    lexer_advance(lexer);
+    break;
+  case ',':
+    lexer_set_token(&token, TOKEN_COMMA, ",", line, column);
     lexer_advance(lexer);
     break;
   case '"':
@@ -273,6 +289,31 @@ char *read_number(Lexer *lexer) {
   strncpy(number, lexer->source_code + start_position, length);
   number[length] = '\0';
   return number;
+}
+
+char *read_comment(Lexer *lexer) {
+  lexer_advance(lexer);
+  lexer_advance(lexer);
+  size_t start_position = lexer->position;
+  // Skip leading spaces
+  while (lexer->current_char == ' ' || lexer->current_char == '\t') {
+    lexer_advance(lexer);
+  }
+  while (lexer->current_char != '\n' && lexer->current_char != '\0') {
+    lexer_advance(lexer);
+  }
+  size_t end_position = lexer->position;
+  size_t length = end_position - start_position;
+  // Skip trailing spaces
+  while (length > 0 &&
+         (lexer->source_code[start_position + length - 1] == ' ' ||
+          lexer->source_code[start_position + length - 1] == '\t')) {
+    length--;
+  }
+  char *comment = (char *)malloc(length + 1);
+  strncpy(comment, lexer->source_code + start_position, length);
+  comment[length] = '\0';
+  return comment;
 }
 
 void free_token(Token *token) {
