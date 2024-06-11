@@ -295,21 +295,10 @@ char *read_comment(Lexer *lexer) {
   lexer_advance(lexer);
   lexer_advance(lexer);
   size_t start_position = lexer->position;
-  // Skip leading spaces
-  while (lexer->current_char == ' ' || lexer->current_char == '\t') {
+  while (lexer->current_char != '\n') {
     lexer_advance(lexer);
   }
-  while (lexer->current_char != '\n' && lexer->current_char != '\0') {
-    lexer_advance(lexer);
-  }
-  size_t end_position = lexer->position;
-  size_t length = end_position - start_position;
-  // Skip trailing spaces
-  while (length > 0 &&
-         (lexer->source_code[start_position + length - 1] == ' ' ||
-          lexer->source_code[start_position + length - 1] == '\t')) {
-    length--;
-  }
+  size_t length = lexer->position - start_position;
   char *comment = (char *)malloc(length + 1);
   strncpy(comment, lexer->source_code + start_position, length);
   comment[length] = '\0';
