@@ -1,4 +1,4 @@
-#include "include/lexer.h"
+#include "../../include/lexer.h"
 
 typedef struct {
   TokenArray *tokenArray;

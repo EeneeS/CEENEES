@@ -1,6 +1,6 @@
-#include "include/file_operations.h"
-#include "include/lexer.h"
-#include "include/parser.h"
+#include "../include/file_operations.h"
+#include "../include/lexer.h"
+#include "../include/parser.h"
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>

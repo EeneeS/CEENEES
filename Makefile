@@ -5,7 +5,7 @@ CC = gcc
 TARGET = build/program
 
 # Define the source files
-SRC = main.c file_operations.c lexer.c parser.c
+SRC = src/main.c src/file_operations/file_operations.c src/lexer/lexer.c src/parser/parser.c
 
 # Define the object files
 OBJ = $(addprefix build/,$(SRC:.c=.o))
