@@ -1,6 +1,9 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "../include/structs/Lexer.h"
+#include "../include/structs/TokenArray.h"
+
 void lexer_init(Lexer *lexer, char *input);
 Token lexer_next_token(Lexer *lexer);
 void free_token(Token *token);

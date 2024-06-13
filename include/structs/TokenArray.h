@@ -2,6 +2,7 @@
 #define TOKENARRAY_H
 
 #include <stddef.h>
+#include "../structs/Token.h"
 
 typedef struct {
   Token *tokens;

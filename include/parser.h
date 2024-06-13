@@ -1,12 +1,8 @@
 #ifndef PARSER_H
 #define PARSER_H
 
-#include <stddef.h>
-
-typedef struct {
-  TokenArray *tokenArray;
-  size_t current_token;
-} Parser;
+#include "../include/structs/Parser.h"
+#include "../include/structs/TokenArray.h"
 
 void parser_init(Parser *parser, TokenArray *tokenArray);
 
