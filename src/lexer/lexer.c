@@ -1,4 +1,7 @@
-#include "../../include/enums/tokenType.h"
+#include "../../include/structs/Lexer.h"
+#include "../../include/enums/TokenType.h"
+#include "../../include/structs/Token.h"
+#include "../../include/structs/TokenArray.h"
 #include <ctype.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -9,28 +12,6 @@ const char *KEYWORDS[] = {
     "and",    "end",  "in",     "repeat", "break", "false", "local",
     "return", "do",   "for",    "nil",    "then",  "else",  "function",
     "not",    "true", "elseif", "if",     "or",    "until", "while"};
-
-typedef struct {
-  TokenType type;
-  char *value;
-  int line;
-  int column;
-} Token;
-
-typedef struct {
-  char *source_code;
-  size_t position;
-  size_t read_position;
-  char current_char;
-  int line;
-  int column;
-} Lexer;
-
-typedef struct {
-  Token *tokens;
-  size_t amount;
-  size_t capacity;
-} TokenArray;
 
 void lexer_init(Lexer *lexer, char *input);
 void lexer_advance(Lexer *lexer);
