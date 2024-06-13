@@ -34,5 +34,8 @@ clean:
 run: $(TARGET)
 	./$(TARGET) ./data/source_code.lua
 
+test: $(TARGET)
+	./$(TARGET) ./data/test.lua
+
 .PHONY: clean run
 
