@@ -257,7 +257,7 @@ char *read_comment(Lexer *lexer) {
 void free_token(Token *token) {
   TokenType type = token->type;
   if (type == TOKEN_IDENTIFIER || type == TOKEN_NUMBER ||
-      type == TOKEN_STRING) {
+      type == TOKEN_STRING || type == TOKEN_COMMENT) {
     free(token->value);
   }
 }
